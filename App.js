@@ -1,10 +1,38 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableHighlight, KeyboardAvoidingView, Animated, Button } from 'react-native';
 
+class AnimatedText extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			currentText: '',
+			delay: 1000 / this.props.txt.length,
+			i: 0
+		};
+	}
+	componentDidMount() {
+		let int = setInterval(() => {
+			this.setState({
+				currentText: this.props.txt.substring(0, this.state.i),
+				i: this.state.i + 1
+			});
+			if (this.state.i > this.props.txt.length) {
+				clearInterval(int);
+			}
+		}, this.state.delay);
+	}
+
+	render() {
+		return (
+			<Text style={this.props.style}>{this.state.currentText}</Text>
+		);
+	}
+}
+
 export default class App extends React.Component {
-	constructor(){
+	constructor() {
 		super();
-		this.animated=new Animated.Value(0);
+		this.animated = new Animated.Value(0);
 	}
 	render() {
 		return (
@@ -17,9 +45,10 @@ export default class App extends React.Component {
 				</View>
 				<View style={styles.whiteScreen}>
 					<View style={styles.readyForm}>
-						<Animated.Text
-							style={styles.thatsIt}
-							>That's it for today folks! See you tomorrow!</Animated.Text>
+						<AnimatedText
+							style={styles.AreYouReady}
+							txt={'That\'s it for today folks... See you tomorrow!'}
+						/>
 					</View>
 				</View>
 			</View >
@@ -45,7 +74,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#D43939',
 		width: '100%'
 	},
-	thatsIt: {
+	AreYouReady: {
 		fontSize: 30,
 		color: '#FFF',
 		alignItems: 'center',
